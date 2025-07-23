@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluación de Currículum con ShadAI</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1> Evaluador de Currículum con ShadAI</h1>
+
+        <form action="/analizar" method="post" enctype="multipart/form-data">
+    <label for="cargo">Cargo o Puesto:</label>
+    <input type="text" id="cargo" name="cargo" required>
+
+    <label for="archivos">Selecciona uno o varios archivos PDF:</label>
+    <input type="file" id="archivo" name="archivo" accept=".pdf" multiple required>
+
+
+    <button type="submit">🔍 Analizar CVs</button>
+    </form>
+
+        {% if resultado %}
+        <div class="resultado">
+     <h2>📊 Resultado del análisis para: {{ filename }}</h2>
+        <pre>{{ resultado }}</pre>
+    </div>
+        {% endif %}
+
+
+        {% if top_resultados %}
+        <div class="resultados-lote">
+        <h2>🏆 Mejores Candidatos Evaluados</h2>
+        {% for r in top_resultados %}
+        <div class="cv-card">
+        <h3>{{ r.nombre }} – <span class="badge">{{ r.decision }}</span></h3>
+        <p><strong>Puntaje:</strong> {{ "%.2f"|format(r.score) }}/100</p>
+        <p><strong>Justificación:</strong> {{ r.justificacion }}</p>
+        </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if pdf_ready %}
+        <div class="descarga-box">
+            <a href="/static/resultado.pdf" download="resultado_shadai.pdf">
+                📥 Descargar resultados en PDF
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+
+
+  
+
+
+
+</body>
+</html>
